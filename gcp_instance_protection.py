@@ -26,37 +26,54 @@ now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 # 보호설정 확인
 # gcloud compute instances describe example-instance | grep "deletionProtection"
 def InstancesProtectionStats(instances,zone):
-    print('### STATUS '+ now + ' ###')
-    for i in instances:
-        status = subprocess.check_output('gcloud compute instances describe ' + i + ' --zone=' + zone + '| grep "deletionProtection"' ,shell=True).strip()
-        print ( i +  "-" +  status)
-    print('### DONE ###')
+    try:
+        print('### STATUS '+ now + ' ###')
+        for x in instances:
+            status = subprocess.check_output('gcloud compute instances describe ' + x + ' --zone=' + zone + '| grep "deletionProtection"' ,shell=True).strip()
+            print ( i +  "-" +  status)
+        print('### DONE ###')
+    except Exception as ex:
+        print(ex)
 
 # 보호 설정
 # gcloud compute instances update example-vm --deletion-protection
 def InstancesProtectionOn(instances,zone):
-    print('### START : +' + now +' ###')
-    for x in instances:
-        subprocess.check_output('gcloud compute instances update ' + x + ' --zone=' + zone + ' --deletion-protection',shell=True).strip()
-    print("### END ###")
+    try : 
+        print('### START : ' + now +' ###')
+        for y in instances:
+            subprocess.check_output('gcloud compute instances update ' + y + ' --zone=' + zone + ' --deletion-protection',shell=True).strip()
+        print("### END ###")
+    except Exception as ex:
+        print(ex)
 
 # 보호 삭제
 # gcloud compute instances update example-vm --no-deletion-protection
 def InstancesProtectionOff(instances,zone):
-    print('### START : +' + now +' ###')
-    for x in instances:
-        subprocess.check_output('gcloud compute instances update ' + x + ' --zone=' + zone + ' --no-deletion-protection',shell=True).strip()
-    print("### END ###")
+    try :
+        print('### START : ' + now +' ###')
+        for z in instances:
+            subprocess.check_output('gcloud compute instances update ' + z + ' --zone=' + zone + ' --no-deletion-protection',shell=True).strip()
+        print("### END ###")
+    except Exception as ex:
+        print(ex)
 
 
 # Run
-while True :
-    num = input("1 - 보호설정 확인\n2 - 보호\n3 - 보호 해제\n")
-    if (num == 1) :
-        InstancesProtectionStats(instances, zone)
-    elif (num == 2):
-        InstancesProtectionOn(instances, zone)
-    elif (num == 3):
-        InstancesProtectionOff(instances, zone)
-    else :
-        print("1-3을 입력해주세요.")
+def main():
+    try :
+        while True :
+            num = input("1 - 보호설정 확인\n2 - 보호\n3 - 보호 해제\n")
+            if (num == 1) :
+                InstancesProtectionStats(instances, zone)
+            elif (num == 2):
+                InstancesProtectionOn(instances, zone)
+            elif (num == 3):
+                InstancesProtectionOff(instances, zone)
+            else :
+                print("1-3을 입력해주세요.")
+    except Exception as ex:
+        print(ex)
+
+# main 
+if __name__ == "__main__":
+	main()
